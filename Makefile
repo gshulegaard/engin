@@ -1,4 +1,4 @@
-.PHONY: clean docker-rm docker-build docker test test-rebuild test-env build upload
+.PHONY: clean venv docker-rm docker-build docker test test-rebuild test-env build upload
 
 TESTS = "tests/"
 N = 1
@@ -13,6 +13,10 @@ clean:
 	@find . -path '*/.*' -prune -o -name '*.so' -exec rm -fr {} +
 	@find . -path '*/.*' -prune -o -name '*.c' -exec rm -fr {} +
 	@find . -path '*/.*' -prune -o -name '*~' -exec rm -fr {} +
+
+venv:
+	@rm -rf venv
+	@python3 -m venv venv/engin
 
 docker-rm:
 	@cd docker && docker-compose -f dev.compose.yaml rm -s -v -f;
