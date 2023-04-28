@@ -46,11 +46,6 @@ class NginxInstanceData:
     prefix: str
     workers: List[Any] = field(default_factory=list)
 
-    def update(self, **kwargs):
-        for k, v in kwargs.items():
-            if hasattr(self, k):
-                setattr(self, k , v)
-
 
 def launch_method_supported(manager_type: str, ppid: int) -> bool:
     """
