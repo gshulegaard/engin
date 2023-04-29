@@ -28,23 +28,13 @@
 import hashlib
 import re
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from coppyr.process import subp
 
 from engin.context import context
 from engin.nginx.bin import get_prefix_and_conf_path
-
-
-@dataclass
-class NginxInstanceData:
-    pid: int
-    version: str
-    bin_path: str
-    conf_path: str
-    prefix: str
-    workers: List[Any] = field(default_factory=list)
+from engin.nginx.objects import NginxInstance
 
 
 def launch_method_supported(manager_type: str, ppid: int) -> bool:
@@ -80,7 +70,7 @@ def launch_method_supported(manager_type: str, ppid: int) -> bool:
     return True
 
 
-def find() -> List[NginxInstanceData]:
+def find() -> List[NginxInstance]:
     ps_cmd = "ps xao pid,ppid,command | grep 'nginx[:]'"
 
     try:
@@ -93,7 +83,7 @@ def find() -> List[NginxInstanceData]:
         context.log.warning(f"No running nginx master processes")
         return []
 
-    master_processes: Dict[int, NginxInstanceData] = {}
+    master_processes: Dict[int, NginxInstance] = {}
     worker_process_cache: Dict[int, List[int]] = {}
     try:
         for line in ps_stdout:
@@ -126,7 +116,7 @@ def find() -> List[NginxInstanceData]:
                     local_string_id = '%s_%s_%s' % (bin_path, conf_path, prefix)
                     local_id = hashlib.sha256(local_string_id.encode('utf-8')).hexdigest()
 
-                    instance = NginxInstanceData(**{
+                    instance = NginxInstance(**{
                         'version': version,
                         'bin_path': bin_path,
                         'conf_path': conf_path,
@@ -154,7 +144,7 @@ def find() -> List[NginxInstanceData]:
         context.log.debug('additional info:', exc_info=True)
 
     # filter workers with non-executable nginx -V (relative paths, etc)
-    results: List[NginxInstanceData] = [
+    results: List[NginxInstance] = [
         i for i in master_processes.values()
         if i.bin_path
     ]

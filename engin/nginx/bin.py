@@ -90,7 +90,7 @@ def nginx_v(bin_path):
         'configure': {}
     }
 
-    _, nginx_v_err = subp.call("%s -V" % bin_path)
+    _, _, nginx_v_err = subp.call(f"{bin_path} -V")
     for line in nginx_v_err:
         # SSL stuff
         try:
