@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from coppyr import Context
+from engin.context import context
 from coppyr import logger
 
 
 # init context
-context = Context(app_name="engin-testing")
+context.app_name = "engin-testing"
+context.setup()
 
 
 # setup logging
