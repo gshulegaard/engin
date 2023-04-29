@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from dataclasses import dataclass, field
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 import crossplane
 from crossplane.builder import build_files
@@ -24,6 +24,14 @@ def load(file_path: str) -> CrossplaneParsePayload:
     return CrossplaneParsePayload(
         **crossplane.parse(file_path)
     )
+
+
+def dumps(
+    payload: CrossplaneParsePayload
+) -> List[str]:
+    return [
+        crossplane.build(cfg["parsed"], indent=2) for cfg in payload.config
+    ]
 
 
 def dump(

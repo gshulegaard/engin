@@ -105,3 +105,24 @@ class NGINXConfigTestCase(BaseTestCase):
         assert new_parsed.config[0]["errors"] == []
         assert new_parsed.config[0]["file"] == os.path.join(tmpdir, "nginx.conf")
 
+    def test_simple_dumps(self):
+        config_path = os.path.join(self.config_root, "simple", "nginx.conf")
+        parsed = config.load(config_path)
+
+        dumps = config.dumps(parsed)
+        assert len(dumps) == 1
+        assert dumps == [
+            'events {\n'
+            '  worker_connections 1024;\n'
+            '}\n'
+            'http {\n'
+            '  server {\n'
+            '    listen 127.0.0.1:8080;\n'
+            '    server_name default_server;\n'
+            '    location / {\n'
+            "      return 200 'foo bar baz';\n"
+            '    }\n'
+            '  }\n'
+            '}'
+        ]
+
