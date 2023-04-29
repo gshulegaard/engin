@@ -21,9 +21,9 @@ class NGINXConfigTestCase(BaseTestCase):
         assert parsed.status == "ok"
         assert parsed.errors == []
         assert len(parsed.config) == 1
-        assert parsed.config[0]["errors"] == []
+        assert parsed.config[0].errors == []
 
-        assert parsed.config[0] == {
+        assert parsed.config[0].to_dict() == {
             "status": "ok",
             "errors": [],
             "file": "/opt/engin/tests/fixtures/nginx/configs/simple/nginx.conf",
@@ -93,7 +93,7 @@ class NGINXConfigTestCase(BaseTestCase):
         with TemporaryDirectory() as tmpdir:
             # change the file value to be in the tmpdir (otherwise dump would
             # just write over the existing file)
-            parsed.config[0]["file"] = os.path.join(tmpdir, "nginx.conf")
+            parsed.config[0].file = os.path.join(tmpdir, "nginx.conf")
 
             config.dump(parsed)
             new_parsed = config.load(os.path.join(tmpdir, "nginx.conf"))
@@ -102,8 +102,8 @@ class NGINXConfigTestCase(BaseTestCase):
         assert new_parsed.status == "ok"
         assert new_parsed.errors == []
         assert len(new_parsed.config) == 1
-        assert new_parsed.config[0]["errors"] == []
-        assert new_parsed.config[0]["file"] == os.path.join(tmpdir, "nginx.conf")
+        assert new_parsed.config[0].errors == []
+        assert new_parsed.config[0].file == os.path.join(tmpdir, "nginx.conf")
 
     def test_simple_dumps(self):
         config_path = os.path.join(self.config_root, "simple", "nginx.conf")
