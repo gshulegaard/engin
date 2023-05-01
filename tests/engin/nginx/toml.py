@@ -8,7 +8,7 @@ from tests import here, BaseTestCase
 from engin.nginx import config, toml
 
 
-class NGINXConfigTestCase(BaseTestCase):
+class NGINXTomlConfigTestCase(BaseTestCase):
     config_root = os.path.join(here, "fixtures", "nginx", "configs")
 
     def test_simple_parse(self):
@@ -73,3 +73,16 @@ class NGINXConfigTestCase(BaseTestCase):
             ]
         }
 
+    def test_simple_dump(self):
+        """
+        Parse an NGINX config from a .toml, dump it to a new file, and then
+        re-parse the new file to ensure it is valid.
+        """
+        config_path = os.path.join(self.config_root, "simple", "nginx.toml")
+        parsed = toml.load(config_path)
+
+        with TemporaryDirectory() as tmpdir:
+            # change the file value to be in the tmpdir (otherwise dump would
+            # just write over the existing file)
+            config.dump(parsed, directory=tmpdir)
+            config.load(os.path.join(tmpdir, parsed.config[0].file))
