@@ -11,7 +11,12 @@ from engin.nginx.objects import CrossplaneParsePayload, NginxConfig
 
 def load(file_path: str) -> CrossplaneParsePayload:
     return CrossplaneParsePayload(
-        **crossplane.parse(file_path)
+        **crossplane.parse(
+            file_path,
+            comments=True,
+            check_args=True,
+            check_ctx=True
+        )
     )
 
 
