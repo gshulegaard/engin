@@ -2,17 +2,11 @@
 import unittest
 
 from engin.context import context
-from coppyr import logger
 
 
 # init context
 context.app_name = "engin-testing"
 context.setup()
-
-
-# setup logging
-logger.setup()
-log = logger.get(level="DEBUG")
 
 
 class BaseTestCase(unittest.TestCase):
@@ -37,7 +31,7 @@ class BaseTestCase(unittest.TestCase):
     def setup_method(self, method):
         context.inc_action_id()
         hdr = '=' * 20
-        log.info(
+        context.log.info(
             f'{hdr} {self.__class__.__name__} {self._testMethodName} {hdr}'
         )
 

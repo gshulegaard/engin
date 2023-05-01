@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import Optional
 import coppyr
+from coppyr.types import lazyproperty
 
 
 class Context(coppyr.Context):
@@ -17,5 +18,18 @@ class Context(coppyr.Context):
             reinitialize=reinitialize
         )
 
+    @lazyproperty
+    def log(self):
+        from engin import logger
 
-context = Context()
+        log_path = self.config.get("LOG_PATH", f"/tmp/{self.app_name}.log")
+        logger.setup(
+            log_path
+        )
+
+        return logger.get(
+            self.config.get("LOG_HANDLER", "file"), level=self.config.LOG_LEVEL
+        )
+
+
+context = Context(app_name="engin")
