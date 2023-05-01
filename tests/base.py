@@ -7,6 +7,7 @@ from engin.context import context
 # init context
 context.app_name = "engin-testing"
 context.setup()
+context.config.ENVIRONMENT = "testing"
 
 
 class BaseTestCase(unittest.TestCase):

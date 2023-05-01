@@ -1,2 +1,3 @@
-coppyr[config,pkg]
-crossplane
+coppyr[config,pkg]==0.9.3
+crossplane==0.5.8
+sanic[ext]==23.3.0

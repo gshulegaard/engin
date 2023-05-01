@@ -3,11 +3,14 @@ import copy
 from coppyr import logger as clogger
 
 
-def setup(log_path):
+def get_default_config(log_path):
     config = copy.deepcopy(clogger.DEFAULT_CONFIG)
     config["handlers"]["file-default"]["filename"] = log_path
+    return config
 
-    clogger.setup(dict_config=config)
+
+def setup(log_path):
+    clogger.setup(dict_config=get_default_config(log_path))
 
 
 def get(name, level=None):

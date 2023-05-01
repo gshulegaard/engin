@@ -12,7 +12,7 @@ def load(file_path: str) -> CrossplaneParsePayload:
     return CrossplaneParsePayload(
         **crossplane.parse(
             file_path,
-            comments=True,
+            comments=False,
             check_args=True,
             check_ctx=True
         )
