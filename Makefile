@@ -15,8 +15,8 @@ clean:
 	@find . -path '*/.*' -prune -o -name '*~' -exec rm -fr {} +
 
 venv:
-	@rm -rf venv
-	@python3 -m venv venv/engin
+	@rm -rf ~/venv/engin
+	@python3 -m venv ~/venv/engin
 
 docker-rm:
 	@cd docker && docker-compose -f dev.compose.yaml rm -s -v -f;

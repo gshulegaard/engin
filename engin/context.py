@@ -19,6 +19,10 @@ class Context(BaseContext, Singleton):
             reinitialize=reinitialize
         )
 
+    def setup(self):
+        self.config
+        self.log
+
     @property
     def environment(self):
         return self.config.get("ENVIRONMENT", "production")
@@ -29,13 +33,8 @@ class Context(BaseContext, Singleton):
 
     @lazyproperty
     def log(self):
-        from engin import logger
-
-        logger.setup(self.log_path)
-
-        return logger.get(
-            self.config.get("LOG_HANDLER", "file"), level=self.config.LOG_LEVEL
-        )
+        from sanic.log import logger
+        return logger
 
 
 context = Context()

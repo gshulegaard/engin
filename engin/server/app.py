@@ -5,15 +5,22 @@ from engin import __version__
 from engin.context import context
 
 
-context.app_name = "engin-api"
+# https://sanic.dev/en/guide/deployment/manager.html#how-sanic-server-starts-processes
+Sanic.start_method = "fork"
 
+
+context.app_name = "engin-api"
+context.config  # load config
 
 app = Sanic(
     context.app_name,
     ctx=context
 )
+
 # Apply Sanic configuration values from engin config
-app.config.update(**context.config.get("server", {}))
+app.config.update(
+    **context.config.get("server", {})
+)
 
 
 ## Update openapi meta
@@ -32,9 +39,7 @@ app.ext.openapi.describe(
 
 ## Add listeners
 if context.environment != "testing":  # skip in testing
-    from engin.server import listeners
-    app.register_listener(listeners.start_supervisor, "after_server_start")
-    # This will register a supervisor on every worker after they are started.
+    from engin.server.listeners import *
 
 ## Add routes
 from engin.server.views.health import Health
